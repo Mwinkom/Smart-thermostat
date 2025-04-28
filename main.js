@@ -203,7 +203,8 @@ document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
 // Add new options from rooms array
 rooms.forEach((room) => {
   const option = document.createElement("option");
-  option.value = room;
+  option.value = room.name; // Bug Fix : Set the value of the option to the room name instead of the room object
+  // option.value = room;
   option.textContent = room.name;
   roomSelect.appendChild(option);
 });
