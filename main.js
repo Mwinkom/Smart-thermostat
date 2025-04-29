@@ -142,13 +142,11 @@ const rooms = [
   },
 ];
 
-const warmOverlay= `linear-gradient(
-    to bottom,
-    rgba(141, 158, 247, 0.2),
-    rgba(194, 197, 215, 0.1)
-  )`;
-
-const coolOverlay = `linear-gradient(to bottom, rgba(236, 96, 98, 0.2), rgba(248, 210, 211, 0.13))`;
+const warmOverlay= `linear-gradient(to bottom, rgba(236, 96, 98, 0.2), rgba(248, 210, 211, 0.13))`;
+const coolOverlay = `linear-gradient(to bottom,rgba(141, 158, 247, 0.2),rgba(194, 197, 215, 0.1))`;
+// const warmOverlay= `linear-gradient(to bottom,rgba(141, 158, 247, 0.2),rgba(194, 197, 215, 0.1))`;
+// const coolOverlay = `linear-gradient(to bottom, rgba(236, 96, 98, 0.2), rgba(248, 210, 211, 0.13))`;
+//Bug Fix 4: The overlay colors were swapped. The warm overlay was set to the cool overlay and vice versa.
 
 const setInitialOverlay = () => {
   document.querySelector(
@@ -203,7 +201,7 @@ document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
 // Add new options from rooms array
 rooms.forEach((room) => {
   const option = document.createElement("option");
-  option.value = room.name; // Bug Fix : Set the value of the option to the room name instead of the room object
+  option.value = room.name; // Bug Fix 1: Set the value of the option to the room name instead of the room object
   // option.value = room;
   option.textContent = room.name;
   roomSelect.appendChild(option);
@@ -242,7 +240,7 @@ defaultSettings.addEventListener("click", function (e) {});
 document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
   //const increaseRoomTemperature = room.increaseTemp;
-  //Bug Fix: the increase temperature method was not being called correctly and it was assigned to a variable when there is no return value
+  //Bug Fix 3: the increase temperature method was not being called correctly and it was assigned to a variable when there is no return value
   
   //Temperature should not increase past 32 degrees
   if (room.currTemp < 32) {
@@ -267,7 +265,7 @@ document.getElementById("increase").addEventListener("click", () => {
 document.getElementById("reduce").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
   //const decreaseRoomTemperature = room.decreaseTemp;
-  //Bug Fix: the decrease temperature method was not being called correctly and it was assigned to a variable when there is no return value
+  //Bug Fix 3: the decrease temperature method was not being called correctly and it was assigned to a variable when there is no return value
 
   //Temperature should not decrease past 10 degrees
   if (room.currTemp > 10) {
@@ -313,7 +311,7 @@ document.getElementById("save").addEventListener("click", () => {
   const errorSpan = document.querySelector(".error");
 
   if (coolInput.value && warmInput.value) {
-    // Validate the data
+    //Validate the data
     if (coolInput.value < 10 || coolInput.value > 25) {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
@@ -323,6 +321,7 @@ document.getElementById("save").addEventListener("click", () => {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
     }
+    
     // Validation passed
     // Set current room's presets
     const currRoom = rooms.find((room) => room.name === selectedRoom);
