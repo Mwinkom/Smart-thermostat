@@ -369,7 +369,9 @@ const generateRooms = () => {
          
           <span class="room-status" style="display: ${
             room.airConditionerOn ? "" : "none"
-          }">${room.currTemp > 25 ? "Cooling room to: " : "Warming room to: "}${
+          // }">${room.currTemp > 24 ? "Cooling room to: " : "Warming room to: "}${
+          }">${room.currTemp > 24 ? "Warming room to: " : "Cooling room to: "}${
+          //Bug Fix 5: The values in the ternary operator were swapped. The cooling and warming messages were not being displayed correctly.
       room.currTemp
     }°</span>
         </div>
