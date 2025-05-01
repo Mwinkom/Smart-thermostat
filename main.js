@@ -234,7 +234,33 @@ roomSelect.addEventListener("change", function () {
 
 // Set preset temperatures
 const defaultSettings = document.querySelector(".default-settings");
-defaultSettings.addEventListener("click", function (e) {});
+// Event Delegation for Cool and Warm Buttons
+defaultSettings.addEventListener("click", (e) => {
+  const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
+  if (!room) return;
+
+  // Check which button was clicked
+  if (e.target.closest("#cool")) {
+    // Apply cool preset
+    room.setCurrTemp(room.coldPreset);
+    setOverlay(room);
+  } else if (e.target.closest("#warm")) {
+    // Apply warm preset
+    room.setCurrTemp(room.warmPreset);
+    setOverlay(room);
+  } else {
+    return; // Ignore clicks outside the buttons
+  }
+
+  // Common UI update after preset
+  setIndicatorPoint(room.currTemp);
+  currentTemp.textContent = `${room.currTemp}°`;
+  generateRooms();
+
+  // Update mini card
+  document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
+});
+
 
 // Increase and decrease temperature
 document.getElementById("increase").addEventListener("click", () => {
@@ -438,3 +464,4 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     setSelectedRoom(e.target.parentNode.parentNode.id);
   }
 });
+
