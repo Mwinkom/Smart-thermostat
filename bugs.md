@@ -76,6 +76,7 @@ This document outlines bugs identified and fixed during the development of the S
   No error message was shown, or the message was vague or inconsistent.
 
 - **Fix Implemented:**  
+  Additionally, added logic to reset the error message (`errorSpan.innerText = ""` and `style.display = "none"`) before re-validating new input values. This ensures errors disappear when the user fixes their input.
 
   **Original Code:**
   ```js
@@ -92,15 +93,22 @@ This document outlines bugs identified and fixed during the development of the S
 
   **Fixed Code:**
   ```js
-    if (coolInput.value < 10 || coolInput.value > 24) {
-  errorSpan.style.display = "block";
-  errorSpan.innerText = "Enter valid cool temperatures (10° - 24°)";
-  }
-
-  if (warmInput.value < 25 || warmInput.value > 32) {
-    errorSpan.style.display = "block";
-    errorSpan.innerText = "Enter valid warm temperatures (25° - 32°)";
-  }
+    // Clear any previous error
+    errorSpan.style.display = "none";
+    errorSpan.innerText = "";
+  
+    // Validate inputs one at a time
+    if (isNaN(coolValue) || coolValue < 10 || coolValue > 24) {
+      errorSpan.style.display = "block";
+      errorSpan.innerText = "Enter valid cool temperature (10° - 24°)";
+      return; 
+    }
+  
+    if (isNaN(warmValue) || warmValue < 25 || warmValue > 32) {
+      errorSpan.style.display = "block";
+      errorSpan.innerText = "Enter valid warm temperature (25° - 32°)";
+      return;
+    }
   ```
 
 ---
