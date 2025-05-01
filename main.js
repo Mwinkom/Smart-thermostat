@@ -336,7 +336,7 @@ document.getElementById("save").addEventListener("click", () => {
   const warmInput = document.getElementById("warmInput");
   const errorSpan = document.querySelector(".error");
 
-  if (coolInput.value && warmInput.value) {
+  //if (coolInput.value && warmInput.value) {
     //Validate the data
     // if (coolInput.value < 10 || coolInput.value > 25) {
     //   errorSpan.style.display = "block";
@@ -348,19 +348,26 @@ document.getElementById("save").addEventListener("click", () => {
     //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
     // }
     
-    if (coolInput.value < 10 || coolInput.value > 24) {
+    const coolValue = parseInt(coolInput.value);
+    const warmValue = parseInt(warmInput.value);
+  
+    // Clear any previous error
+    errorSpan.style.display = "none";
+    errorSpan.innerText = "";
+  
+    // Validate inputs one at a time
+    if (isNaN(coolValue) || coolValue < 10 || coolValue > 24) {
       errorSpan.style.display = "block";
-      errorSpan.innerText = "Enter valid cool temperatures (10° - 24°)";
+      errorSpan.innerText = "Enter valid cool temperature (10° - 24°)";
+      return; 
     }
-
-    if (warmInput.value < 25 || warmInput.value > 32) {
+  
+    if (isNaN(warmValue) || warmValue < 25 || warmValue > 32) {
       errorSpan.style.display = "block";
-      errorSpan.innerText = "Enter valid warm temperatures (25° - 32°)";
+      errorSpan.innerText = "Enter valid warm temperature (25° - 32°)";
+      return;
     }
     
-    //Bug Fix 4: The error message was not being displayed correctly based on the preset temperature ranges.
-  
-
     // Validation passed
     // Set current room's presets
     const currRoom = rooms.find((room) => room.name === selectedRoom);
@@ -370,8 +377,15 @@ document.getElementById("save").addEventListener("click", () => {
 
     coolInput.value = "";
     warmInput.value = "";
-  }
-});
+  
+    // Give feedback or close config section if needed
+    errorSpan.style.display = "none";
+    errorSpan.innerText = "";
+  });  
+
+  //Bug Fix 4: The error message was vague and not specific to the input that was invalid. Error messages did not clear when the user entered valid data. 
+  
+
 
 // Rooms Control
 // Generate rooms
