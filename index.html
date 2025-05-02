@@ -136,6 +136,20 @@
       <div
         class="container rooms-control animate__animated animate__fadeIn"
       ></div>
+
+    <!-- Add Room Modal -->
+    <div id="room-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Add New Room</h3>
+        <input type="text" id="room-name" placeholder="Room Name" />
+        <input type="number" id="room-temp" placeholder="Initial Temp" min="10" max="32" />
+        <input type="number" id="cold-preset" placeholder="Cool Preset" min="10" max="24" />
+        <input type="number" id="warm-preset" placeholder="Warm Preset" min="25" max="32" />
+        <input type="file" id="room-image" accept="image/*" />
+        <span class="room-error"></span>
+        <button id="save-room">Save</button>
+        <button id="close-room-modal">Cancel</button>
+      </div>
     </div>
 
     <!-- Ionicons -->

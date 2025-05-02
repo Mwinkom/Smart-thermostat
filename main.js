@@ -197,7 +197,12 @@ currentTemp.textContent = `${rooms[0].currTemp}°`;
 setInitialOverlay();
 
 document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
+
 // Add new options from rooms array
+
+function generateDropdownOptions() {
+  roomSelect.innerHTML = "";
+
 rooms.forEach((room) => {
   const option = document.createElement("option");
   option.value = room.name; // Bug Fix 1: Set the value of the option to the room name instead of the room object
@@ -205,6 +210,27 @@ rooms.forEach((room) => {
   option.textContent = room.name;
   roomSelect.appendChild(option);
 });
+
+  // Add "+ Add Room" as last option
+  const addOption = document.createElement("option");
+  addOption.value = "__addRoom__";
+  addOption.textContent = "+ Add Room";
+  addOption.style.color = "#4458c3";
+  roomSelect.appendChild(addOption);
+}
+generateDropdownOptions();
+
+roomSelect.addEventListener("change", function () {
+  if (this.value === "__addRoom__") {
+    document.getElementById("room-modal").classList.remove("hidden");
+    this.selectedIndex = 0; // Revert dropdown to the first room
+    return;
+  }
+
+  selectedRoom = this.value;
+  setSelectedRoom(selectedRoom);
+});
+
 
 // Set current temperature to currently selected room
 
@@ -224,11 +250,7 @@ const setSelectedRoom = (selectedRoom) => {
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 };
 
-roomSelect.addEventListener("change", function () {
-  selectedRoom = this.value;
 
-  setSelectedRoom(selectedRoom);
-});
 
 
 // Set preset temperatures
@@ -384,6 +406,99 @@ document.getElementById("save").addEventListener("click", () => {
 
   //Bug Fix 4: The error message was vague and not specific to the input that was invalid. Error messages did not clear when the user entered valid data. 
   
+// Open Modal
+document.getElementById("openAddRoomModal").addEventListener("click", () => {
+  document.getElementById("room-modal").classList.remove("hidden");
+});
+
+// Close Modal
+document.getElementById("close-room-modal").addEventListener("click", () => {
+  document.getElementById("room-modal").classList.add("hidden");
+  clearRoomForm();
+});
+
+// Save Room
+document.getElementById("save-room").addEventListener("click", () => {
+  const name = document.getElementById("room-name").value.trim();
+  const temp = parseInt(document.getElementById("room-temp").value);
+  const cold = parseInt(document.getElementById("cold-preset").value);
+  const warm = parseInt(document.getElementById("warm-preset").value);
+  const imageInput = document.getElementById("room-image");
+  const errorBox = document.querySelector(".room-error");
+
+  // Clear previous error
+  errorBox.textContent = "";
+
+  if (!name || isNaN(temp) || isNaN(cold) || isNaN(warm)) {
+    errorBox.textContent = "Please fill out all fields.";
+    return;
+  }
+
+  if (cold < 10 || cold > 24 || warm < 25 || warm > 32 || temp < 10 || temp > 32) {
+    errorBox.textContent = "Enter valid temperature ranges.";
+    return;
+  }
+
+  if (rooms.some(r => r.name.toLowerCase() === name.toLowerCase())) {
+    errorBox.textContent = "Room already exists.";
+    return;
+  }
+
+  let imageUrl = "./assets/default.jpg"; // Fallback image
+  if (imageInput.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imageUrl = e.target.result;
+      addRoom(name, temp, cold, warm, imageUrl);
+    };
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    addRoom(name, temp, cold, warm, imageUrl);
+  }
+});
+
+function addRoom(name, temp, cold, warm, imageUrl) {
+  rooms.push({
+    name,
+    currTemp: temp,
+    coldPreset: cold,
+    warmPreset: warm,
+    image: imageUrl,
+    airConditionerOn: false,
+    startTime: '00:00',
+    endTime: '00:00',
+    setCurrTemp(temp) { this.currTemp = temp; },
+    setColdPreset(val) { this.coldPreset = parseInt(val); },
+    setWarmPreset(val) { this.warmPreset = parseInt(val); },
+    decreaseTemp() { this.currTemp--; },
+    increaseTemp() { this.currTemp++; },
+    toggleAircon() {
+      this.airConditionerOn = !this.airConditionerOn;
+    },
+  });
+
+  generateRooms();
+  updateRoomDropdown();
+  document.getElementById("room-modal").classList.add("hidden");
+  clearRoomForm();
+}
+
+// Update dropdown with new room
+function updateRoomDropdown() {
+  const roomSelect = document.getElementById("rooms");
+  roomSelect.innerHTML = "";
+  generateDropdownOptions();
+}
+
+// Reset form
+function clearRoomForm() {
+  document.getElementById("room-name").value = "";
+  document.getElementById("room-temp").value = "";
+  document.getElementById("cold-preset").value = "";
+  document.getElementById("warm-preset").value = "";
+  document.getElementById("room-image").value = "";
+  document.querySelector(".room-error").textContent = "";
+}
 
 
 // Rooms Control
