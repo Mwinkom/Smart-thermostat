@@ -90,6 +90,15 @@
             </button>
           </div>
 
+          <div class="schedule-section">
+            <div class="time-schedule-wrapper">
+              <label>Start Time: <input type="time" id="start-time" /></label>
+              <label>End Time: <input type="time" id="end-time" /></label>
+            </div>
+            <button id="set-schedule">Set Schedule</button>
+            <span class="schedule-error"></span>
+          </div>
+
           <div class="configure">
             <button id="newPreset">
               <ion-icon name="cog"></ion-icon>Configure Presets
@@ -118,6 +127,7 @@
           </div>
         </div>
       </div>
+
 
       <div
         class="container rooms-control animate__animated animate__fadeIn"

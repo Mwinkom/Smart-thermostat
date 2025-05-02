@@ -391,3 +391,71 @@ span.room-status {
   margin: 20px 0 0 0;
   color: #7c7c83;
 }
+
+/* Schedule section styles */
+.schedule-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #eaeaeb;
+  /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08); */
+}
+
+.schedule-section label {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.time-schedule-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-radius: 8px;
+}
+
+#start-time,
+#end-time {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius:6px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+#start-time:focus,
+#end-time:focus {
+  border-color: var(--cool-blue);
+}
+
+#set-schedule {
+  padding: 10px;
+  background-color: var(--cool-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#set-schedule:hover {
+  background-color: #3344a0;
+}
+
+.schedule-error {
+  color: #ec6062;
+  font-size: 13px;
+  margin-top: -5px;
+}
