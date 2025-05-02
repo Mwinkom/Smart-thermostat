@@ -459,3 +459,41 @@ span.room-status {
   font-size: 13px;
   margin-top: -5px;
 }
+
+/* Turn On All ACs */
+.bulk-ac-btn {
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-light);
+  color: var(--text-secondary);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.bulk-ac-btn:hover {
+  background-color: #c9c9c9;
+}
+
+.bulk-ac-btn ion-icon {
+  font-size: 18px;
+  pointer-events: none;
+  color: var(--text-primary);
+}
+
+#ac-toggle-label {
+  pointer-events: none;
+}
+
+/* .logo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+} */
