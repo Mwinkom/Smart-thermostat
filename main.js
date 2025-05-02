@@ -323,11 +323,23 @@ document.getElementById("newPreset").addEventListener("click", () => {
   if (inputsDiv.classList.contains("hidden")) {
     inputsDiv.classList.remove("hidden");
   }
+
+  if (schedulePreset.classList.contains("hidden")) {
+    schedulePreset.classList.remove("hidden");
+  }
 });
+
+const schedulePreset = document.getElementById("schedule-preset");
+
 
 // close inputs
 document.getElementById("close").addEventListener("click", () => {
   inputsDiv.classList.add("hidden");
+});
+
+//close set schedule
+document.getElementById("close-schedule").addEventListener("click", () => {
+  schedulePreset.classList.add("hidden");
 });
 
 // handle preset input data
@@ -404,26 +416,20 @@ document.getElementById("toggle-all-ac").addEventListener("click", () => {
 document.getElementById("set-schedule").addEventListener("click", () => {
   const startTime = document.getElementById("start-time").value;
   const endTime = document.getElementById("end-time").value;
-  const errorSpan = document.querySelector(".schedule-error");
-
-
-  errorSpan.textContent = "";
 
   if (!startTime || !endTime) {
     alert("Please select both start and end times.");
     return;
   }
 
-  // if (startTime >= endTime) {
-  //   errorSpan.textContent = "Start time must be before end time.";
-  //   return;
-  // }
-
   const room = rooms.find((room) => room.name === selectedRoom);
   room.startTime = startTime;
   room.endTime = endTime;
 
   alert(`Schedule set for ${room.name}: ${startTime} - ${endTime}`);
+
+  document.getElementById("start-time").value = "";
+  document.getElementById("end-time").value = "";
 });
 
 // Automatic AC control based on schedule

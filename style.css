@@ -31,12 +31,24 @@ body {
   align-items: center;
 }
 
+@media (max-width: 960px) {
+  body .main-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+}
+
 .container {
   padding: 30px;
   background-color: #ffffff;
   border-radius: 8px;
   cursor: pointer;
   width: 450px;
+}
+
+.center{
+  margin: 0 auto 25px;
 }
 
 .main-container {
@@ -163,7 +175,7 @@ svg.point {
 }
 
 .inputs {
-  margin: 0 0 20px 0;
+  margin: 20px 0 20px 0;
   /* border: solid 1px pink; */
   display: flex;
   align-items: center;
@@ -189,7 +201,7 @@ svg.point {
   cursor: pointer;
 }
 
-.inputs #close {
+.inputs #close, #close-schedule  {
   border: none;
   background: none;
   font-size: 18px;
@@ -200,6 +212,11 @@ svg.point {
   color: #ec6062;
   text-align: center;
   margin: 10px 0 0 0;
+}
+
+.temperature-presets{
+  display: flex;
+  justify-content: center;
 }
 
 #newPreset {
@@ -398,7 +415,7 @@ span.room-status {
   flex-direction: column;
   gap: 12px;
   margin: 20px 0;
-  padding: 20px;
+  padding: 20px 20px 10px;
   border-radius: 12px;
   background-color: #eaeaeb;
   /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08); */
@@ -439,13 +456,13 @@ span.room-status {
   border-color: var(--cool-blue);
 }
 
-#set-schedule {
+#set-schedule{
   padding: 10px;
   background-color: var(--cool-blue);
   color: white;
   border: none;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -479,7 +496,7 @@ span.room-status {
 }
 
 .bulk-ac-btn:hover {
-  background-color: #c9c9c9;
+  background-color: #cfcfcf;
 }
 
 .bulk-ac-btn ion-icon {
