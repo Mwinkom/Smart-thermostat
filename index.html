@@ -62,10 +62,6 @@
             </svg>
 
             <div class="info">
-              <button id="toggle-all-ac" class="bulk-ac-btn">
-                <ion-icon size="large" name="flash"></ion-icon>
-                <span id="ac-toggle-label">Turn On All ACs</span>
-              </button>   
               <p>Current Temp</p>
               <h1 id="temp"></h1>
             </div>
@@ -94,48 +90,57 @@
             </button>
           </div>
 
-          <div class="schedule-section">
-            <div class="time-schedule-wrapper">
-              <label>Start Time: <input type="time" id="start-time" /></label>
-              <label>End Time: <input type="time" id="end-time" /></label>
-            </div>
-            <button id="set-schedule">Set Schedule</button>
-            <span class="schedule-error"></span>
-          </div>
-
           <div class="configure">
-            <button id="newPreset">
-              <ion-icon name="cog"></ion-icon>Configure Presets
-            </button>
-          </div>
+            <div class="temperature-presets">
+              <button id="newPreset">
+                <ion-icon name="cog"></ion-icon>Configure Presets
+              </button>
+                        </div>
+              
+                        <div class="inputs hidden">
+              <input
+                id="coolInput"
+                type="number"
+                min="10"
+                max="22"
+                placeholder="Cool"
+              />
+              <input
+                id="warmInput"
+                type="number"
+                min="22"
+                max="32"
+                placeholder="Warm"
+              />
+              <button id="save">Save</button>
+              <button id="close"><ion-icon name="close"></ion-icon></button>
+              <span class="error"></span>
+            </div>
 
-          <div class="inputs hidden">
-            <input
-              id="coolInput"
-              type="number"
-              min="10"
-              max="22"
-              placeholder="Cool"
-            />
-            <input
-              id="warmInput"
-              type="number"
-              min="22"
-              max="32"
-              placeholder="Warm"
-            />
-            <button id="save">Save</button>
-            <button id="close"><ion-icon name="close"></ion-icon></button>
+            <div class="schedule-section hidden" id="schedule-preset">
+              <div class="time-schedule-wrapper">
+                <label>Start Time: <input type="time" id="start-time" /></label>
+                <label>End Time: <input type="time" id="end-time" /></label>
+              </div>
+              <button id="set-schedule">Set Schedule</button>
+              <button id="close-schedule"><ion-icon name="close"></ion-icon></button>
+            </div>
 
-            <span class="error"></span>
           </div>
         </div>
       </div>
 
 
-      <div
-        class="container rooms-control animate__animated animate__fadeIn"
-      ></div>
+      <div class="container">  
+        <div
+          class="rooms-control animate__animated animate__fadeIn"
+        ></div>
+        <!--All AC toggle button -->
+        <button id="toggle-all-ac" class="bulk-ac-btn center">
+          <ion-icon size="large" name="flash"></ion-icon>
+          <span id="ac-toggle-label">Turn On All ACs</span>
+        </button> 
+      </div>
 
     <!-- Add Room Modal -->
     <div id="room-modal" class="modal hidden">
