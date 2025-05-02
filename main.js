@@ -7,9 +7,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/living-room.jpg",
     airConditionerOn: false,
-    startTime: '16:30',
-    endTime: '20:00',
-
+    startTime: '00:00',
+    endTime: '00:00',
     setCurrTemp(temp) {
       this.currTemp = temp;
     },
@@ -43,7 +42,9 @@ const rooms = [
     image: "./assets/kitchen.jpg",
     airConditionerOn: false,
     startTime: '16:30',
-    endTime: '20:00',
+    endTime: '20:00', 
+    startTime: '00:00',
+    endTime: '00:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
@@ -77,8 +78,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/bathroom.jpg",
     airConditionerOn: false,
-    startTime: '16:30',
-    endTime: '20:00',
+    startTime: '00:00',
+    endTime: '00:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
@@ -112,8 +113,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/bedroom.jpg",
     airConditionerOn: false,
-    startTime: '16:30',
-    endTime: '20:00',
+    startTime: '00:00',
+    endTime: '00:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
@@ -478,4 +479,54 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     setSelectedRoom(e.target.parentNode.parentNode.id);
   }
 });
+
+//Set schedule
+document.getElementById("set-schedule").addEventListener("click", () => {
+  const startTime = document.getElementById("start-time").value;
+  const endTime = document.getElementById("end-time").value;
+  const errorSpan = document.querySelector(".schedule-error");
+
+
+  errorSpan.textContent = "";
+
+  if (!startTime || !endTime) {
+    alert("Please select both start and end times.");
+    return;
+  }
+
+  // if (startTime >= endTime) {
+  //   errorSpan.textContent = "Start time must be before end time.";
+  //   return;
+  // }
+
+  const room = rooms.find((room) => room.name === selectedRoom);
+  room.startTime = startTime;
+  room.endTime = endTime;
+
+  alert(`Schedule set for ${room.name}: ${startTime} - ${endTime}`);
+});
+
+// Automatic AC control based on schedule
+setInterval(() => {
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0, 5); // Format as HH:MM
+
+  rooms.forEach((room) => {
+    if (!room.startTime || !room.endTime) return;
+
+    // Turn AC on at start time
+    if (room.startTime === currentTime && !room.airConditionerOn) {
+      room.airConditionerOn = true;
+      console.log(`AC turned ON for ${room.name}`);
+    }
+
+    // Turn AC off at end time
+    if (room.endTime === currentTime && room.airConditionerOn) {
+      room.airConditionerOn = false;
+      console.log(`AC turned OFF for ${room.name}`);
+    }
+  });
+
+  generateRooms(); // Update UI if needed
+}, 1000);
 
