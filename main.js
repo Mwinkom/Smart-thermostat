@@ -198,28 +198,14 @@ currentTemp.textContent = `${rooms[0].currTemp}°`;
 setInitialOverlay();
 
 document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
-
-function generateDropdownOptions() {
-  roomSelect.innerHTML = "";
-
-  // Add new options from rooms array
-  rooms.forEach((room) => {
-    const option = document.createElement("option");
-    option.value = room.name; // Bug Fix 1: Set the value of the option to the room name instead of the room object
-    // option.value = room;
-    option.textContent = room.name;
-    roomSelect.appendChild(option);
-  });
-
-  // Add "+ Add Room" as the last option
-  const addOption = document.createElement("option");
-  addOption.value = "__addRoom__";
-  addOption.textContent = "+ Add Room";
-  addOption.style.color = "#4458c3";
-  roomSelect.appendChild(addOption);
-}
-
-generateDropdownOptions();
+// Add new options from rooms array
+rooms.forEach((room) => {
+  const option = document.createElement("option");
+  option.value = room.name; // Bug Fix 1: Set the value of the option to the room name instead of the room object
+  // option.value = room;
+  option.textContent = room.name;
+  roomSelect.appendChild(option);
+});
 
 // Set current temperature to currently selected room
 
@@ -239,19 +225,11 @@ const setSelectedRoom = (selectedRoom) => {
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 };
 
-
-// Event listener for room selection
 roomSelect.addEventListener("change", function () {
-  if (this.value === "__addRoom__") {
-    document.getElementById("room-modal").classList.remove("hidden");
-    this.selectedIndex = 0; 
-    return;
-  }
-
   selectedRoom = this.value;
+
   setSelectedRoom(selectedRoom);
 });
-
 
 
 // Set preset temperatures
@@ -358,7 +336,7 @@ document.getElementById("save").addEventListener("click", () => {
   const warmInput = document.getElementById("warmInput");
   const errorSpan = document.querySelector(".error");
 
-  if (coolInput.value && warmInput.value) {
+  //if (coolInput.value && warmInput.value) {
     //Validate the data
     // if (coolInput.value < 10 || coolInput.value > 25) {
     //   errorSpan.style.display = "block";
@@ -370,22 +348,26 @@ document.getElementById("save").addEventListener("click", () => {
     //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
     // }
     
-    if (coolInput.value < 10 || coolInput.value > 24) {
+    const coolValue = parseInt(coolInput.value);
+    const warmValue = parseInt(warmInput.value);
+  
+    // Clear any previous error
+    errorSpan.style.display = "none";
+    errorSpan.innerText = "";
+  
+    // Validate inputs one at a time
+    if (isNaN(coolValue) || coolValue < 10 || coolValue > 24) {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid cool temperature (10° - 24°)";
-      return;
+      return; 
     }
-    
-    if (warmInput.value < 25 || warmInput.value > 32) {
+  
+    if (isNaN(warmValue) || warmValue < 25 || warmValue > 32) {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid warm temperature (25° - 32°)";
       return;
     }
     
-    
-    //Bug Fix 4: The error message was not being displayed correctly based on the preset temperature ranges.
-  
-
     // Validation passed
     // Set current room's presets
     const currRoom = rooms.find((room) => room.name === selectedRoom);
@@ -395,93 +377,28 @@ document.getElementById("save").addEventListener("click", () => {
 
     coolInput.value = "";
     warmInput.value = "";
-  }
-});
+  
+    // Give feedback or close config section if needed
+    errorSpan.style.display = "none";
+    errorSpan.innerText = "";
+  });  
 
-document.getElementById("close-room-modal").addEventListener("click", () => {
-  document.getElementById("room-modal").classList.add("hidden");
-  clearRoomForm();
-});
+  //Bug Fix 4: The error message was vague and not specific to the input that was invalid. Error messages did not clear when the user entered valid data. 
+  
 
-// Add new room
-document.getElementById("save-room").addEventListener("click", () => {
-  const name = document.getElementById("room-name").value.trim();
-  const temp = parseInt(document.getElementById("room-temp").value);
-  const cold = parseInt(document.getElementById("cold-preset").value);
-  const warm = parseInt(document.getElementById("warm-preset").value);
-  const imageInput = document.getElementById("room-image");
-  const errorBox = document.querySelector(".room-error");
-
-  errorBox.textContent = "";
-
-  if (!name || isNaN(temp) || isNaN(cold) || isNaN(warm)) {
-    errorBox.textContent = "Please fill out all fields.";
-    return;
-  }
-
-  if (cold < 10 || cold > 24 || warm < 25 || warm > 32 || temp < 10 || temp > 32) {
-    errorBox.textContent = "Enter valid temperature ranges.";
-    return;
-  }
-
-  if (rooms.some(r => r.name.toLowerCase() === name.toLowerCase())) {
-    errorBox.textContent = "Room already exists.";
-    return;
-  }
-
-  let imageUrl = "./assets/default.jpg";
-  if (imageInput.files.length > 0) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      imageUrl = e.target.result;
-      addRoom(name, temp, cold, warm, imageUrl);
-    };
-    reader.readAsDataURL(imageInput.files[0]);
-  } else {
-    addRoom(name, temp, cold, warm, imageUrl);
-  }
-});
-
-function addRoom(name, temp, cold, warm, imageUrl) {
-  rooms.push({
-    name,
-    currTemp: temp,
-    coldPreset: cold,
-    warmPreset: warm,
-    image: imageUrl,
-    airConditionerOn: false,
-    startTime: '16:30',
-    endTime: '20:00',
-    setCurrTemp(temp) { this.currTemp = temp; },
-    setColdPreset(val) { this.coldPreset = parseInt(val); },
-    setWarmPreset(val) { this.warmPreset = parseInt(val); },
-    decreaseTemp() { this.currTemp--; },
-    increaseTemp() { this.currTemp++; },
-    toggleAircon() {
-      this.airConditionerOn = !this.airConditionerOn;
-    },
+// Toggle all ACs
+document.getElementById("toggle-all-ac").addEventListener("click", () => {
+  const turningOn = !rooms.every(room => room.airConditionerOn);
+  rooms.forEach(room => {
+    room.airConditionerOn = turningOn;
   });
 
+  // Update label
+  const label = document.getElementById("ac-toggle-label");
+  label.textContent = turningOn ? "Turn Off All ACs" : "Turn On All ACs";
+
   generateRooms();
-  updateRoomDropdown();
-  document.getElementById("room-modal").classList.add("hidden");
-  clearRoomForm();
-};
-
-// Update the room dropdown with the new room
-function updateRoomDropdown() {
-  generateDropdownOptions();
-}
-
-// Clear the room form
-function clearRoomForm() {
-  document.getElementById("room-name").value = "";
-  document.getElementById("room-temp").value = "";
-  document.getElementById("cold-preset").value = "";
-  document.getElementById("warm-preset").value = "";
-  document.getElementById("room-image").value = "";
-  document.querySelector(".room-error").textContent = "";
-}
+});
 
 
 // Rooms Control
@@ -575,4 +492,3 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     setSelectedRoom(e.target.parentNode.parentNode.id);
   }
 });
-
