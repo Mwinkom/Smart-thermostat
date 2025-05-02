@@ -400,6 +400,176 @@ document.getElementById("toggle-all-ac").addEventListener("click", () => {
   generateRooms();
 });
 
+//Set schedule
+document.getElementById("set-schedule").addEventListener("click", () => {
+  const startTime = document.getElementById("start-time").value;
+  const endTime = document.getElementById("end-time").value;
+  const errorSpan = document.querySelector(".schedule-error");
+
+
+  errorSpan.textContent = "";
+
+  if (!startTime || !endTime) {
+    alert("Please select both start and end times.");
+    return;
+  }
+
+  // if (startTime >= endTime) {
+  //   errorSpan.textContent = "Start time must be before end time.";
+  //   return;
+  // }
+
+  const room = rooms.find((room) => room.name === selectedRoom);
+  room.startTime = startTime;
+  room.endTime = endTime;
+
+  alert(`Schedule set for ${room.name}: ${startTime} - ${endTime}`);
+});
+
+// Automatic AC control based on schedule
+setInterval(() => {
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0, 5); // Format as HH:MM
+
+  rooms.forEach((room) => {
+    if (!room.startTime || !room.endTime) return;
+
+    // Turn AC on at start time
+    if (room.startTime === currentTime && !room.airConditionerOn) {
+      room.airConditionerOn = true;
+      console.log(`AC turned ON for ${room.name}`);
+    }
+
+    // Turn AC off at end time
+    if (room.endTime === currentTime && room.airConditionerOn) {
+      room.airConditionerOn = false;
+      console.log(`AC turned OFF for ${room.name}`);
+    }
+  });
+
+  generateRooms(); 
+}, 1000);
+
+document.getElementById("close-room-modal").addEventListener("click", () => {
+  document.getElementById("room-modal").classList.add("hidden");
+  clearRoomForm();
+});
+
+//Dropdown for adding new room
+function generateDropdownOptions() {
+  roomSelect.innerHTML = "";
+
+  // Add new options from rooms array
+  rooms.forEach((room) => {
+    const option = document.createElement("option");
+    option.value = room.name; // Bug Fix 1: Set the value of the option to the room name instead of the room object
+    // option.value = room;
+    option.textContent = room.name;
+    roomSelect.appendChild(option);
+  });
+
+  // Add "+ Add Room" as the last option
+  const addOption = document.createElement("option");
+  addOption.value = "__addRoom__";
+  addOption.textContent = "+ Add Room";
+  addOption.style.color = "#4458c3";
+  roomSelect.appendChild(addOption);
+}
+
+generateDropdownOptions();
+
+// Add new room
+document.getElementById("save-room").addEventListener("click", () => {
+  const name = document.getElementById("room-name").value.trim();
+  const temp = parseInt(document.getElementById("room-temp").value);
+  const cold = parseInt(document.getElementById("cold-preset").value);
+  const warm = parseInt(document.getElementById("warm-preset").value);
+  const imageInput = document.getElementById("room-image");
+  const errorBox = document.querySelector(".room-error");
+
+  errorBox.textContent = "";
+
+  if (!name || isNaN(temp) || isNaN(cold) || isNaN(warm)) {
+    errorBox.textContent = "Please fill out all fields.";
+    return;
+  }
+
+  if (cold < 10 || cold > 24 || warm < 25 || warm > 32 || temp < 10 || temp > 32) {
+    errorBox.textContent = "Enter valid temperature ranges.";
+    return;
+  }
+
+  if (rooms.some(r => r.name.toLowerCase() === name.toLowerCase())) {
+    errorBox.textContent = "Room already exists.";
+    return;
+  }
+
+  let imageUrl = "./assets/default.jpg";
+  if (imageInput.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imageUrl = e.target.result;
+      addRoom(name, temp, cold, warm, imageUrl);
+    };
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    addRoom(name, temp, cold, warm, imageUrl);
+  }
+});
+
+function addRoom(name, temp, cold, warm, imageUrl) {
+  rooms.push({
+    name,
+    currTemp: temp,
+    coldPreset: cold,
+    warmPreset: warm,
+    image: imageUrl,
+    airConditionerOn: false,
+    startTime: '16:30',
+    endTime: '20:00',
+    setCurrTemp(temp) { this.currTemp = temp; },
+    setColdPreset(val) { this.coldPreset = parseInt(val); },
+    setWarmPreset(val) { this.warmPreset = parseInt(val); },
+    decreaseTemp() { this.currTemp--; },
+    increaseTemp() { this.currTemp++; },
+    toggleAircon() {
+      this.airConditionerOn = !this.airConditionerOn;
+    },
+  });
+
+  generateRooms();
+  updateRoomDropdown();
+  document.getElementById("room-modal").classList.add("hidden");
+  clearRoomForm();
+};
+
+// Update the room dropdown with the new room
+function updateRoomDropdown() {
+  generateDropdownOptions();
+}
+
+// Clear the room form
+function clearRoomForm() {
+  document.getElementById("room-name").value = "";
+  document.getElementById("room-temp").value = "";
+  document.getElementById("cold-preset").value = "";
+  document.getElementById("warm-preset").value = "";
+  document.getElementById("room-image").value = "";
+  document.querySelector(".room-error").textContent = "";
+}
+
+// Event listener for room selection
+roomSelect.addEventListener("change", function () {
+  if (this.value === "__addRoom__") {
+    document.getElementById("room-modal").classList.remove("hidden");
+    this.selectedIndex = 0; 
+    return;
+  }
+
+  selectedRoom = this.value;
+  setSelectedRoom(selectedRoom);
+});
+
 
 // Rooms Control
 // Generate rooms
