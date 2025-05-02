@@ -270,7 +270,7 @@ svg.point {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .room {
@@ -492,8 +492,59 @@ span.room-status {
   pointer-events: none;
 }
 
-/* .logo-container {
+
+/* Add Room Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 320px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-} */
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-content button {
+  padding: 10px;
+  border: none;
+  background-color: var(--cool-blue);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #3c4db2;
+}
+
+.room-error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+}
+
+#rooms option:last-child {
+  font-weight: bold;
+  color: #4458c3;
+}
