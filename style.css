@@ -270,7 +270,7 @@ svg.point {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .room {
