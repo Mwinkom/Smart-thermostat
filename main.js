@@ -7,8 +7,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/living-room.jpg",
     airConditionerOn: false,
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '16:30',
+    endTime: '20:00',
     setCurrTemp(temp) {
       this.currTemp = temp;
     },
@@ -41,8 +41,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/kitchen.jpg",
     airConditionerOn: false,
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '16:30',
+    endTime: '20:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
@@ -76,8 +76,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/bathroom.jpg",
     airConditionerOn: false,
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '16:30',
+    endTime: '20:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
@@ -111,8 +111,8 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/bedroom.jpg",
     airConditionerOn: false,
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '16:30',
+    endTime: '20:00',
 
     setCurrTemp(temp) {
       this.currTemp = temp;
