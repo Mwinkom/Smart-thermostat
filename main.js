@@ -41,8 +41,6 @@ const rooms = [
     warmPreset: 32,
     image: "./assets/kitchen.jpg",
     airConditionerOn: false,
-    startTime: '16:30',
-    endTime: '20:00', 
     startTime: '00:00',
     endTime: '00:00',
 
@@ -479,6 +477,21 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     setSelectedRoom(e.target.parentNode.parentNode.id);
   }
 });
+
+// Toggle all ACs
+document.getElementById("toggle-all-ac").addEventListener("click", () => {
+  const turningOn = !rooms.every(room => room.airConditionerOn);
+  rooms.forEach(room => {
+    room.airConditionerOn = turningOn;
+  });
+
+  // Update label
+  const label = document.getElementById("ac-toggle-label");
+  label.textContent = turningOn ? "Turn Off All ACs" : "Turn On All ACs";
+
+  generateRooms();
+});
+
 
 //Set schedule
 document.getElementById("set-schedule").addEventListener("click", () => {

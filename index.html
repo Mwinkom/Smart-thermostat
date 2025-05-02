@@ -30,7 +30,7 @@
     <div class="main-container">
       <div class="container animate__animated animate__fadeInUp">
         <div class="top-content">
-          <h1 class="logo">Thermostat</h1>
+          <h1 class="logo">Thermostat</h1>       
           <select id="rooms"></select>
         </div>
         <!-- Interior card -->
@@ -62,6 +62,10 @@
             </svg>
 
             <div class="info">
+              <button id="toggle-all-ac" class="bulk-ac-btn">
+                <ion-icon size="large" name="flash"></ion-icon>
+                <span id="ac-toggle-label">Turn On All ACs</span>
+              </button>   
               <p>Current Temp</p>
               <h1 id="temp"></h1>
             </div>
